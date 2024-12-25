@@ -3,14 +3,10 @@ package com.food.fooddeliverybackend.entity;
 import com.food.fooddeliverybackend.audit.BaseEntity;
 import com.food.fooddeliverybackend.enums.UserRoles;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends BaseEntity<String> {
@@ -20,6 +16,6 @@ public class User extends BaseEntity<String> {
     private String username;
     private String email;
     @Enumerated(EnumType.STRING)
-    private UserRoles role;
+    private UserRoles role = UserRoles.USER;
     private String password;
 }
