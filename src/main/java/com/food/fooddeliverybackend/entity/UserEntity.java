@@ -9,13 +9,16 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends BaseEntity<String> {
+public class UserEntity extends BaseEntity<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String email;
     @Enumerated(EnumType.STRING)
-    private UserRoles role = UserRoles.USER;
+    private UserRoles role = UserRoles.CUSTOMER;
     private String password;
+    private boolean isActive = true;
+    private String address;
+    private String profilePictureUrl;
 }

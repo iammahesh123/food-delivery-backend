@@ -1,6 +1,6 @@
 package com.food.fooddeliverybackend.service.impl;
 
-import com.food.fooddeliverybackend.entity.User;
+import com.food.fooddeliverybackend.entity.UserEntity;
 import com.food.fooddeliverybackend.model.UserLoginDTO;
 import com.food.fooddeliverybackend.model.UserRegisterDTO;
 import com.food.fooddeliverybackend.model.UserResponseDTO;
@@ -32,20 +32,20 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.findByUsername(userRegisterDTO.getUsername()).isPresent()) {
             throw new RuntimeException("Username is already taken");
         }
-        User user = new User();
-        user.setUsername(userRegisterDTO.getUsername());
-        user.setRole(userRegisterDTO.getRole());
-        user.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
-        user.setEmail(userRegisterDTO.getEmail());
-        userRepository.save(user);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(userRegisterDTO.getUsername());
+        userEntity.setRole(userRegisterDTO.getRole());
+        userEntity.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
+        userEntity.setEmail(userRegisterDTO.getEmail());
+        userRepository.save(userEntity);
 
         // Send a welcome email
         String subject = "Welcome to Food Delivery Service!";
         String message = String.format(
                 "Hello %s,\n\nWelcome to Food Delivery Service! We're thrilled to have you on board.\n\nBest Regards,\nThe Team",
-                user.getUsername()
+                userEntity.getUsername()
         );
-        emailService.sendEmail(user.getEmail(), subject, message);
+        emailService.sendEmail(userEntity.getEmail(), subject, message);
 
         return "User registered successfully!";
     }
@@ -55,20 +55,20 @@ public class AuthServiceImpl implements AuthService {
         UserResponseDTO responseDTO = new UserResponseDTO();
         String username = userLoginDTO.getUsername();
         String password = userLoginDTO.getPassword();
-        User user = userRepository.findByUsername(username)
+        UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Check password
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, userEntity.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
         // Generate JWT token
         String token = jwtUtil.generateToken(username);
         responseDTO.setToken(token);
-        responseDTO.setRole(String.valueOf(user.getRole()));
-        responseDTO.setCreatedAt(user.getCreatedAt());
-        responseDTO.setUpdatedAt(user.getUpdatedAt());
+        responseDTO.setRole(String.valueOf(userEntity.getRole()));
+        responseDTO.setCreatedAt(userEntity.getCreatedAt());
+        responseDTO.setUpdatedAt(userEntity.getUpdatedAt());
         return responseDTO;
     }
 }

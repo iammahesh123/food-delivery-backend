@@ -1,6 +1,6 @@
 package com.food.fooddeliverybackend.service.impl;
 
-import com.food.fooddeliverybackend.entity.FoodItem;
+import com.food.fooddeliverybackend.entity.FoodItemEntity;
 import com.food.fooddeliverybackend.model.FoodItemRequestDTO;
 import com.food.fooddeliverybackend.model.FoodItemResponseDTO;
 import com.food.fooddeliverybackend.repository.FoodItemRepository;
@@ -20,13 +20,13 @@ public class FoodItemServiceImpl implements FoodItemService {
 
     @Override
     public FoodItemResponseDTO addFood(FoodItemRequestDTO foodRequestDTO) {
-        FoodItem food = new FoodItem();
+        FoodItemEntity food = new FoodItemEntity();
         food.setName(foodRequestDTO.getName());
         food.setDescription(foodRequestDTO.getDescription());
         food.setPrice(foodRequestDTO.getPrice());
         food.setCategory(foodRequestDTO.getCategory());
         food.setImage(foodRequestDTO.getImageUrl());
-        FoodItem savedFood = foodItemRepository.save(food);
+        FoodItemEntity savedFood = foodItemRepository.save(food);
         return mapToDTO(savedFood);
     }
 
@@ -39,12 +39,12 @@ public class FoodItemServiceImpl implements FoodItemService {
 
     @Override
     public FoodItemResponseDTO getFoodById(Long id) {
-        FoodItem food = foodItemRepository.findById(id)
+        FoodItemEntity food = foodItemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Food not found"));
         return mapToDTO(food);
     }
 
-    private FoodItemResponseDTO mapToDTO(FoodItem food) {
+    private FoodItemResponseDTO mapToDTO(FoodItemEntity food) {
         FoodItemResponseDTO dto = new FoodItemResponseDTO();
         dto.setId(food.getId());
         dto.setName(food.getName());
