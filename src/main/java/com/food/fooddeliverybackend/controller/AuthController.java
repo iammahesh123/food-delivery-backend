@@ -1,6 +1,8 @@
 package com.food.fooddeliverybackend.controller;
 
+import com.food.fooddeliverybackend.model.UserLoginDTO;
 import com.food.fooddeliverybackend.model.UserRegisterDTO;
+import com.food.fooddeliverybackend.model.UserResponseDTO;
 import com.food.fooddeliverybackend.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
-        return ResponseEntity.ok(authService.login(username, password));
+    public ResponseEntity<UserResponseDTO> login(@RequestBody UserLoginDTO userLoginDTO) {
+        return ResponseEntity.ok(authService.login(userLoginDTO));
     }
 }

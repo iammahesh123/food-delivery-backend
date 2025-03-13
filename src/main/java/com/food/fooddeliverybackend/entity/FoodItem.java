@@ -19,8 +19,7 @@ public class FoodItem extends BaseEntity<String> {
     private String description;
     private Double price;
 
-    @Lob // Use if storing the image in the database
-    private byte[] image;
+    private String image;
     private String category;
 
 }

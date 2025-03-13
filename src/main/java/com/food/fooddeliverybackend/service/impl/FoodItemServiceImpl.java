@@ -25,12 +25,7 @@ public class FoodItemServiceImpl implements FoodItemService {
         food.setDescription(foodRequestDTO.getDescription());
         food.setPrice(foodRequestDTO.getPrice());
         food.setCategory(foodRequestDTO.getCategory());
-        try {
-            food.setImage(foodRequestDTO.getImage().getBytes());
-        } catch (Exception e) {
-            throw new RuntimeException("Error processing image", e);
-        }
-
+        food.setImage(foodRequestDTO.getImageUrl());
         FoodItem savedFood = foodItemRepository.save(food);
         return mapToDTO(savedFood);
     }
@@ -49,13 +44,6 @@ public class FoodItemServiceImpl implements FoodItemService {
         return mapToDTO(food);
     }
 
-    public byte[] getFoodImageById(Long id) {
-        FoodItem food = foodItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Food not found"));
-        return food.getImage();
-    }
-
-
     private FoodItemResponseDTO mapToDTO(FoodItem food) {
         FoodItemResponseDTO dto = new FoodItemResponseDTO();
         dto.setId(food.getId());
@@ -63,7 +51,7 @@ public class FoodItemServiceImpl implements FoodItemService {
         dto.setDescription(food.getDescription());
         dto.setPrice(food.getPrice());
         dto.setCategory(food.getCategory());
-        dto.setImageUrl("/api/foods/images/" + food.getId()); // Endpoint to retrieve the image
+        dto.setImageUrl(food.getImage());
         return dto;
     }
 }

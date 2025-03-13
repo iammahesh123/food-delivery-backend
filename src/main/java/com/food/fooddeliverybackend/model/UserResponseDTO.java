@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class UserResponseDTO {
     String token;
+    String role;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 

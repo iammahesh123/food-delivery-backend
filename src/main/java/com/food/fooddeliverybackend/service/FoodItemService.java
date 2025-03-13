@@ -9,7 +9,4 @@ public interface FoodItemService {
     FoodItemResponseDTO addFood(FoodItemRequestDTO foodRequestDTO);
     List<FoodItemResponseDTO> getAllFoods();
     FoodItemResponseDTO getFoodById(Long id);
-    byte[] getFoodImageById(Long id);
-
-
 }

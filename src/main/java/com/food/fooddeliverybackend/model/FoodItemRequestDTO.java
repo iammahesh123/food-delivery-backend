@@ -13,5 +13,5 @@ public class FoodItemRequestDTO {
     private String description;
     private Double price;
     private String category;
-    private MultipartFile image;
+    private String imageUrl;
 }

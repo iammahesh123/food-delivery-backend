@@ -1,7 +1,9 @@
 package com.food.fooddeliverybackend.service.impl;
 
 import com.food.fooddeliverybackend.entity.User;
+import com.food.fooddeliverybackend.model.UserLoginDTO;
 import com.food.fooddeliverybackend.model.UserRegisterDTO;
+import com.food.fooddeliverybackend.model.UserResponseDTO;
 import com.food.fooddeliverybackend.repository.UserRepository;
 import com.food.fooddeliverybackend.security.JwtUtil;
 import com.food.fooddeliverybackend.service.AuthService;
@@ -49,7 +51,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String login(String username, String password) {
+    public UserResponseDTO login(UserLoginDTO userLoginDTO) {
+        UserResponseDTO responseDTO = new UserResponseDTO();
+        String username = userLoginDTO.getUsername();
+        String password = userLoginDTO.getPassword();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -60,6 +65,10 @@ public class AuthServiceImpl implements AuthService {
 
         // Generate JWT token
         String token = jwtUtil.generateToken(username);
-        return token;
+        responseDTO.setToken(token);
+        responseDTO.setRole(String.valueOf(user.getRole()));
+        responseDTO.setCreatedAt(user.getCreatedAt());
+        responseDTO.setUpdatedAt(user.getUpdatedAt());
+        return responseDTO;
     }
 }

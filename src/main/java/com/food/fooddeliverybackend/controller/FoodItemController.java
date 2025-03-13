@@ -37,12 +37,4 @@ public class FoodItemController {
     public ResponseEntity<FoodItemResponseDTO> getFoodById(@PathVariable Long id) {
         return ResponseEntity.ok(foodService.getFoodById(id));
     }
-
-    @GetMapping("/images/{id}")
-    public ResponseEntity<byte[]> getFoodImage(@PathVariable Long id) {
-        byte[] image = foodService.getFoodImageById(id);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE)
-                .body(image);
-    }
 }
