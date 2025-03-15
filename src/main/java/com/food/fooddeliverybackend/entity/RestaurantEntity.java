@@ -45,4 +45,8 @@ public class RestaurantEntity extends BaseEntity<String> {
 
     @OneToMany(mappedBy = "restaurantEntity", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<OrdersEntity> orders;
+
+    @ManyToOne
+    @JoinColumn(name = "collection_id")
+    private CollectionEntity collectionEntity;
 }

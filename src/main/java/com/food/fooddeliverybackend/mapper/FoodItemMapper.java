@@ -1,6 +1,7 @@
-package com.food.fooddeliverybackend.model;
+package com.food.fooddeliverybackend.mapper;
 
 import com.food.fooddeliverybackend.entity.FoodItemEntity;
+import com.food.fooddeliverybackend.model.FoodItemResponseDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

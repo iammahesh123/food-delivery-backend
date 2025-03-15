@@ -3,12 +3,14 @@ package com.food.fooddeliverybackend.controller;
 import com.food.fooddeliverybackend.model.RestaurantRequestDTO;
 import com.food.fooddeliverybackend.model.RestaurantResponseDTO;
 import com.food.fooddeliverybackend.service.RestaurantService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/restaurant")
 public class RestaurantController {
 
     private final RestaurantService restaurantService;
@@ -38,8 +40,9 @@ public class RestaurantController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<RestaurantResponseDTO> deleteRestaurant(@PathVariable Long id) {
-        return ResponseEntity.ok().body(restaurantService.delete(id));
+    public ResponseEntity<HttpStatus> deleteRestaurant(@PathVariable Long id) {
+        restaurantService.delete(id);
+        return ResponseEntity.ok().body(HttpStatus.ACCEPTED);
     }
 
 }

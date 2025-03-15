@@ -22,10 +22,10 @@ public class CartItemEntity extends BaseEntity<String> {
     private double price;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id",nullable = false)
+    @JoinColumn(name = "cart_id",nullable = true)
     private CartEntity cartEntity;
 
     @ManyToOne
-    @JoinColumn(name = "food_item_id",nullable = false)
+    @JoinColumn(name = "food_item_id",nullable = true)
     private FoodItemEntity foodItemEntity;
 }

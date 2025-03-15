@@ -1,7 +1,7 @@
 package com.food.fooddeliverybackend.service.impl;
 
 import com.food.fooddeliverybackend.entity.FoodItemEntity;
-import com.food.fooddeliverybackend.model.FoodItemMapper;
+import com.food.fooddeliverybackend.mapper.FoodItemMapper;
 import com.food.fooddeliverybackend.model.FoodItemRequestDTO;
 import com.food.fooddeliverybackend.model.FoodItemResponseDTO;
 import com.food.fooddeliverybackend.repository.FoodItemRepository;

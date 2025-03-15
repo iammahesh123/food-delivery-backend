@@ -55,7 +55,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponseDTO deleteOrder(Long id) {
-        return null;
+    public void deleteOrder(Long id) {
+        OrdersEntity orders = ordersRepository.findById(id).orElse(null);
+        ordersRepository.delete(orders);
     }
 }

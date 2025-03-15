@@ -27,6 +27,7 @@ public class RestaurantResponseDTO {
     private Long ownerId;
     private List<Long> foodItemsIds;
     private List<Long> ordersIds;
+    private Long collectionId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;

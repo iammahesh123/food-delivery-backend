@@ -21,6 +21,7 @@ public class PromoCodeEntity extends BaseEntity<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String codeName;
     private String code;
     private double discountAmount;
     private LocalDateTime validFrom;
@@ -28,5 +29,4 @@ public class PromoCodeEntity extends BaseEntity<String> {
     private int usageLimit;
     private int usedCount=0;
     private boolean isActive=true;
-
 }

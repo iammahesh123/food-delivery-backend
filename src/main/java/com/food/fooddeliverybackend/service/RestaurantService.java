@@ -12,5 +12,5 @@ public interface RestaurantService {
     RestaurantResponseDTO update(Long id,RestaurantRequestDTO restaurantRequestDTO);
     RestaurantResponseDTO get(Long id);
     List<RestaurantResponseDTO> getAll();
-    RestaurantResponseDTO delete(Long id);
+    void delete(Long id);
 }

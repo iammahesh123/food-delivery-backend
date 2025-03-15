@@ -25,4 +25,5 @@ public class RestaurantRequestDTO {
     private Long ownerId;
     private List<Long> foodItemsIds;
     private List<Long> ordersIds;
+    private Long collectionId;
 }

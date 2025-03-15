@@ -34,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
         }
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(userRegisterDTO.getUsername());
+        userEntity.setFullName(userRegisterDTO.getFullName());
         userEntity.setRole(userRegisterDTO.getRole());
         userEntity.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
         userEntity.setEmail(userRegisterDTO.getEmail());
@@ -53,9 +54,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserResponseDTO login(UserLoginDTO userLoginDTO) {
         UserResponseDTO responseDTO = new UserResponseDTO();
-        String username = userLoginDTO.getUsername();
+        String username = userLoginDTO.getEmail();
         String password = userLoginDTO.getPassword();
-        UserEntity userEntity = userRepository.findByUsername(username)
+        UserEntity userEntity = userRepository.findByEmailIgnoreCase(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Check password
@@ -64,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // Generate JWT token
-        String token = jwtUtil.generateToken(username);
+        String token = jwtUtil.generateToken(userEntity.getUsername());
         responseDTO.setToken(token);
         responseDTO.setRole(String.valueOf(userEntity.getRole()));
         responseDTO.setCreatedAt(userEntity.getCreatedAt());
