@@ -2,5 +2,7 @@ package com.food.fooddeliverybackend.enums;
 
 public enum UserRoles {
     ADMIN,
-    USER
+    CUSTOMER,
+    RESTAURANT_OWNER,
+    DELIVERY_PERSON
 }
