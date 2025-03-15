@@ -25,7 +25,7 @@ public class FoodItemServiceImpl implements FoodItemService {
         food.setDescription(foodRequestDTO.getDescription());
         food.setPrice(foodRequestDTO.getPrice());
         food.setCategory(foodRequestDTO.getCategory());
-        food.setImage(foodRequestDTO.getImageUrl());
+        food.setImageUrl(foodRequestDTO.getImageUrl());
         FoodItemEntity savedFood = foodItemRepository.save(food);
         return mapToDTO(savedFood);
     }
@@ -51,7 +51,7 @@ public class FoodItemServiceImpl implements FoodItemService {
         dto.setDescription(food.getDescription());
         dto.setPrice(food.getPrice());
         dto.setCategory(food.getCategory());
-        dto.setImageUrl(food.getImage());
+        dto.setImageUrl(food.getImageUrl());
         return dto;
     }
 }

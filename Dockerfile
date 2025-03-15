@@ -1,19 +1,39 @@
-FROM maven:3.8.3-openjdk-11-slim AS builder
+# Use an official Eclipse Temurin JDK image for the builder stage
+FROM eclipse-temurin:17-jdk-jammy AS builder
 
-# Add Maintainer Info
-LABEL maintainer="maheshkadambala18@gmail.com"
+# Set the working directory inside the container
+WORKDIR /app
 
-# Add a volume pointing to /tmp
-VOLUME /tmp
+# Copy the Maven Wrapper files
+COPY mvnw .
+COPY .mvn/ .mvn
 
-# Make port 8080 available to the world outside this container
+# Copy the Maven project files
+COPY pom.xml .
+COPY src ./src
+
+# Build the application using Maven Wrapper
+RUN ./mvnw clean package -DskipTests
+
+# Use a smaller Eclipse Temurin JRE image for the final stage
+FROM eclipse-temurin:17-jre-jammy
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the JAR file from the builder stage
+COPY --from=builder /app/target/*.jar ./app.jar
+
+# Expose the port your application will run on
 EXPOSE 8080
 
-# The application's jar file
-ARG JAR_FILE=./target/food-backend-svc.jar
+# Run as a non-root user for security
+RUN adduser --system --no-create-home appuser
+USER appuser
 
-# Add the application's jar to the container
-ADD ${JAR_FILE} food-backend-svc.jar
+# Health check to ensure the application is running
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl -f http://localhost:8080/actuator/health || exit 1
 
-# Run the jar file
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/food-backend-svc.jar"]
+# Command to run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]

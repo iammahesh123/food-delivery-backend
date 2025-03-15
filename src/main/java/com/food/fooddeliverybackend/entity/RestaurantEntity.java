@@ -40,9 +40,9 @@ public class RestaurantEntity extends BaseEntity<String> {
     @JoinColumn(name = "owner_id", nullable = false)
     private UserEntity owner;
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurantEntity", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<FoodItemEntity> foodItemEntities;
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurantEntity", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<OrdersEntity> orders;
 }
