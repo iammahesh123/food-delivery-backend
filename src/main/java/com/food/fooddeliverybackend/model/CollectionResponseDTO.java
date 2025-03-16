@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,6 +16,7 @@ public class CollectionResponseDTO {
     private String collectionType;
     private String description;
     private long places;
+    private List<CollectionRestaurantDTO> restaurants;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;
