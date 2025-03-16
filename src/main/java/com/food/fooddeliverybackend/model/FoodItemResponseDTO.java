@@ -14,4 +14,5 @@ public class FoodItemResponseDTO {
     private Double price;
     private String category;
     private String imageUrl;
+    private Long restaurantId;
 }
