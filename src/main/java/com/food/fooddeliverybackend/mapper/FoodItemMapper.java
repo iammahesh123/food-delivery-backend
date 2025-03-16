@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class FoodItemMapper {
     public FoodItemResponseDTO foodItemResponseDTO(FoodItemEntity foodItemEntity, ModelMapper modelMapper) {
-        return modelMapper.map(foodItemEntity, FoodItemResponseDTO.class);
+        FoodItemResponseDTO foodItemResponseDTO =  modelMapper.map(foodItemEntity, FoodItemResponseDTO.class);
+        if (foodItemEntity != null && foodItemEntity.getRestaurantEntity() != null) {
+            foodItemResponseDTO.setRestaurantId(foodItemEntity.getRestaurantEntity().getId());
+        }
+        return foodItemResponseDTO;
     }
 }
