@@ -5,6 +5,7 @@ import com.food.fooddeliverybackend.entity.RestaurantEntity;
 import com.food.fooddeliverybackend.mapper.FoodItemMapper;
 import com.food.fooddeliverybackend.model.FoodItemRequestDTO;
 import com.food.fooddeliverybackend.model.FoodItemResponseDTO;
+import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.repository.FoodItemRepository;
 import com.food.fooddeliverybackend.repository.RestaurantRepository;
 import com.food.fooddeliverybackend.service.FoodItemService;
@@ -56,7 +57,7 @@ public class FoodItemServiceImpl implements FoodItemService {
     }
 
     @Override
-    public List<FoodItemResponseDTO> getAllFoods() {
+    public List<FoodItemResponseDTO> getAllFoods(PageModel pageModel) {
         List<FoodItemEntity> foods = foodItemRepository.findAll();
         return foods.stream().map(food -> foodItemMapper.foodItemResponseDTO(food,modelMapper)).collect(Collectors.toList());
     }
