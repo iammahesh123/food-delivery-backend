@@ -9,10 +9,13 @@ import com.food.fooddeliverybackend.repository.ReviewRepository;
 import com.food.fooddeliverybackend.service.ReviewService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.food.fooddeliverybackend.util.PaginationUtility.applyPagination;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -50,7 +53,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<ReviewResponseDTO> getAllReviews(PageModel pageModel) {
-        List<ReviewEntity> reviews = reviewRepository.findAll();
+        Page<ReviewEntity> reviews = reviewRepository.findAll(applyPagination(pageModel));
         return reviews.stream().map(reviewEntity -> reviewMapper.toDTO(reviewEntity,modelMapper)).collect(Collectors.toList());
     }
 

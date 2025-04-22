@@ -9,10 +9,13 @@ import com.food.fooddeliverybackend.repository.PromoCodeRepository;
 import com.food.fooddeliverybackend.service.PromoCodeService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.food.fooddeliverybackend.util.PaginationUtility.applyPagination;
 
 @Service
 public class PromoCodeServiceImpl implements PromoCodeService {
@@ -50,7 +53,7 @@ public class PromoCodeServiceImpl implements PromoCodeService {
 
     @Override
     public List<PromoCodeResponseDTO> getPromoCodes(PageModel pageModel) {
-        List<PromoCodeEntity> promoCodeEntities = promoCodeRepository.findAll();
+        Page<PromoCodeEntity> promoCodeEntities = promoCodeRepository.findAll(applyPagination(pageModel));
         return promoCodeEntities.stream().map(codeEntity -> promoCodeMapper.toDTO(codeEntity,modelMapper)).collect(Collectors.toList());
     }
 

@@ -5,6 +5,9 @@ import com.food.fooddeliverybackend.enums.UserRoles;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -30,6 +33,9 @@ public class UserEntity extends BaseEntity<String> {
     private String password;
 
     private boolean isActive = true;
-    private String address;
+    //private String address;
     private String profilePictureUrl;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<AddressEntity> addresses = new ArrayList<>();
 }

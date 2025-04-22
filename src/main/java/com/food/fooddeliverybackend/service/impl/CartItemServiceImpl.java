@@ -9,10 +9,13 @@ import com.food.fooddeliverybackend.repository.CartItemRepository;
 import com.food.fooddeliverybackend.service.CartItemService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.food.fooddeliverybackend.util.PaginationUtility.applyPagination;
 
 @Service
 public class CartItemServiceImpl implements CartItemService {
@@ -50,7 +53,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public List<CartItemResponseDTO> getAllCartItems(PageModel pageModel) {
-        List<CartItemEntity> cartItemEntities = cartItemRepository.findAll();
+        Page<CartItemEntity> cartItemEntities = cartItemRepository.findAll(applyPagination(pageModel));
         return cartItemEntities.stream().map(item -> cartItemMapper.toDTO(item,modelMapper)).collect(Collectors.toList());
     }
 

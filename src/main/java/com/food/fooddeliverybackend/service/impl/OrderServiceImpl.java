@@ -10,10 +10,13 @@ import com.food.fooddeliverybackend.service.OrderService;
 import org.hibernate.query.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.food.fooddeliverybackend.util.PaginationUtility.applyPagination;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -51,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderResponseDTO> getAllOrders(PageModel pageModel) {
-        List<OrdersEntity> orders = ordersRepository.findAll();
+        Page<OrdersEntity> orders = ordersRepository.findAll(applyPagination(pageModel));
         return orders.stream().map(ordersEntity ->  orderMapper.orderResponseDTO(ordersEntity, modelMapper)).collect(Collectors.toList());
     }
 

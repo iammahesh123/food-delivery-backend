@@ -9,10 +9,13 @@ import com.food.fooddeliverybackend.repository.CollectionsRepository;
 import com.food.fooddeliverybackend.service.CollectionService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.food.fooddeliverybackend.util.PaginationUtility.applyPagination;
 
 @Service
 public class CollectionServiceImpl implements CollectionService {
@@ -50,7 +53,7 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public List<CollectionResponseDTO> getCollections(PageModel pageModel) {
-        List<CollectionEntity> collectionEntities = collectionsRepository.findAll();
+        Page<CollectionEntity> collectionEntities = collectionsRepository.findAll(applyPagination(pageModel));
         return collectionEntities.stream().map(collectionEntity -> collectionsMapper.toCollectionsDTO(collectionEntity, modelMapper)).collect(Collectors.toList());
     }
 

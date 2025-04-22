@@ -16,10 +16,13 @@ import com.food.fooddeliverybackend.repository.UserRepository;
 import com.food.fooddeliverybackend.service.RestaurantService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.food.fooddeliverybackend.util.PaginationUtility.applyPagination;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -104,7 +107,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public List<RestaurantResponseDTO> getAll(PageModel pageModel) {
-        List<RestaurantEntity> restaurants = restaurantRepository.findAll();
+        Page<RestaurantEntity> restaurants = restaurantRepository.findAll(applyPagination(pageModel));
         return restaurants.stream().map(restaurant -> restaurantMapper.toDTO(restaurant,modelMapper)).collect(Collectors.toList());
     }
 

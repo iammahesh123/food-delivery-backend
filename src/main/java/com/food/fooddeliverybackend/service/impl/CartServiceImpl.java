@@ -10,11 +10,14 @@ import com.food.fooddeliverybackend.repository.CartRepository;
 import com.food.fooddeliverybackend.service.CartService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.food.fooddeliverybackend.util.PaginationUtility.applyPagination;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -52,7 +55,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartResponseDTO> getAllCart(PageModel pageModel) {
-        List<CartEntity> carts = cartRepository.findAll();
+        Page<CartEntity> carts = cartRepository.findAll(applyPagination(pageModel));
         return carts.stream().map(entity -> cartMapper.toDTO(entity,modelMapper)).collect(Collectors.toList());
     }
 
