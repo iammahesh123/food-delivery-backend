@@ -2,6 +2,7 @@ package com.food.fooddeliverybackend.service.impl;
 
 import com.food.fooddeliverybackend.entity.PromoCodeEntity;
 import com.food.fooddeliverybackend.mapper.PromoCodeMapper;
+import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.model.PromoCodeRequestDTO;
 import com.food.fooddeliverybackend.model.PromoCodeResponseDTO;
 import com.food.fooddeliverybackend.repository.PromoCodeRepository;
@@ -48,7 +49,7 @@ public class PromoCodeServiceImpl implements PromoCodeService {
     }
 
     @Override
-    public List<PromoCodeResponseDTO> getPromoCodes() {
+    public List<PromoCodeResponseDTO> getPromoCodes(PageModel pageModel) {
         List<PromoCodeEntity> promoCodeEntities = promoCodeRepository.findAll();
         return promoCodeEntities.stream().map(codeEntity -> promoCodeMapper.toDTO(codeEntity,modelMapper)).collect(Collectors.toList());
     }

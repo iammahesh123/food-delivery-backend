@@ -4,6 +4,7 @@ import com.food.fooddeliverybackend.entity.CartItemEntity;
 import com.food.fooddeliverybackend.mapper.CartItemMapper;
 import com.food.fooddeliverybackend.model.CartItemRequestDTO;
 import com.food.fooddeliverybackend.model.CartItemResponseDTO;
+import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.repository.CartItemRepository;
 import com.food.fooddeliverybackend.service.CartItemService;
 import org.modelmapper.ModelMapper;
@@ -48,7 +49,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public List<CartItemResponseDTO> getAllCartItems() {
+    public List<CartItemResponseDTO> getAllCartItems(PageModel pageModel) {
         List<CartItemEntity> cartItemEntities = cartItemRepository.findAll();
         return cartItemEntities.stream().map(item -> cartItemMapper.toDTO(item,modelMapper)).collect(Collectors.toList());
     }

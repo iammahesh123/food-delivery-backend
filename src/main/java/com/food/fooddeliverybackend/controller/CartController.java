@@ -1,14 +1,18 @@
 package com.food.fooddeliverybackend.controller;
 
+import com.food.fooddeliverybackend.enums.OrderBy;
 import com.food.fooddeliverybackend.model.CartRequestDTO;
 import com.food.fooddeliverybackend.model.CartResponseDTO;
+import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.service.CartService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Cart Controller", description = "List of Cart Endpoints")
 @RestController
 @RequestMapping("/cart")
 public class CartController {
@@ -35,8 +39,13 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CartResponseDTO>> getAll() {
-        return ResponseEntity.ok(cartService.getAllCart());
+    public ResponseEntity<List<CartResponseDTO>> getAll(
+            @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "sortColumn", required = false) String sortColumn,
+            @RequestParam(value = "orderBY", required = false) OrderBy orderBy) {
+        PageModel pageModel = new PageModel(pageNumber, pageSize, sortColumn, orderBy);
+        return ResponseEntity.ok(cartService.getAllCart(pageModel));
     }
 
     @DeleteMapping("/{id}")

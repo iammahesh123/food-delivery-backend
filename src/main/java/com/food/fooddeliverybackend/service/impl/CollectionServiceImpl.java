@@ -4,6 +4,7 @@ import com.food.fooddeliverybackend.entity.CollectionEntity;
 import com.food.fooddeliverybackend.mapper.CollectionsMapper;
 import com.food.fooddeliverybackend.model.CollectionRequestDTO;
 import com.food.fooddeliverybackend.model.CollectionResponseDTO;
+import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.repository.CollectionsRepository;
 import com.food.fooddeliverybackend.service.CollectionService;
 import org.modelmapper.ModelMapper;
@@ -48,7 +49,7 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public List<CollectionResponseDTO> getCollections() {
+    public List<CollectionResponseDTO> getCollections(PageModel pageModel) {
         List<CollectionEntity> collectionEntities = collectionsRepository.findAll();
         return collectionEntities.stream().map(collectionEntity -> collectionsMapper.toCollectionsDTO(collectionEntity, modelMapper)).collect(Collectors.toList());
     }

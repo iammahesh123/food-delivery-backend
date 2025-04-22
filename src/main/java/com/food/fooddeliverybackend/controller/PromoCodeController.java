@@ -1,14 +1,18 @@
 package com.food.fooddeliverybackend.controller;
 
+import com.food.fooddeliverybackend.enums.OrderBy;
+import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.model.PromoCodeRequestDTO;
 import com.food.fooddeliverybackend.model.PromoCodeResponseDTO;
 import com.food.fooddeliverybackend.service.PromoCodeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "PromoCode Controller", description = "List of PromoCode Endpoints")
 @RestController
 @RequestMapping("/promo-codes")
 public class PromoCodeController {
@@ -35,8 +39,13 @@ public class PromoCodeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PromoCodeResponseDTO>> getAllPromoCodes() {
-        return ResponseEntity.ok().body(promoCodeService.getPromoCodes());
+    public ResponseEntity<List<PromoCodeResponseDTO>> getAllPromoCodes(
+            @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "sortColumn", required = false) String sortColumn,
+            @RequestParam(value = "orderBY", required = false) OrderBy orderBy) {
+        PageModel pageModel = new PageModel(pageNumber, pageSize, sortColumn, orderBy);
+        return ResponseEntity.ok().body(promoCodeService.getPromoCodes(pageModel));
     }
 
     @DeleteMapping("/{id}")

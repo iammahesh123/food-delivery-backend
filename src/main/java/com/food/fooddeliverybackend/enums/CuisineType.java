@@ -1,5 +1,7 @@
 package com.food.fooddeliverybackend.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum CuisineType {
 
     INDIAN("North Indian", "South Indian", "Mughlai", "Bengali", "Punjabi"),
@@ -35,6 +37,12 @@ public enum CuisineType {
     public String[] getSubTypes() {
         return subTypes;
     }
+
+    @JsonCreator
+    public static CuisineType fromString(String value) {
+        return CuisineType.valueOf(value.toUpperCase());
+    }
+
 }
 
 

@@ -2,6 +2,7 @@ package com.food.fooddeliverybackend.service.impl;
 
 import com.food.fooddeliverybackend.entity.ReviewEntity;
 import com.food.fooddeliverybackend.mapper.ReviewMapper;
+import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.model.ReviewRequestDTO;
 import com.food.fooddeliverybackend.model.ReviewResponseDTO;
 import com.food.fooddeliverybackend.repository.ReviewRepository;
@@ -48,7 +49,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewResponseDTO> getAllReviews() {
+    public List<ReviewResponseDTO> getAllReviews(PageModel pageModel) {
         List<ReviewEntity> reviews = reviewRepository.findAll();
         return reviews.stream().map(reviewEntity -> reviewMapper.toDTO(reviewEntity,modelMapper)).collect(Collectors.toList());
     }

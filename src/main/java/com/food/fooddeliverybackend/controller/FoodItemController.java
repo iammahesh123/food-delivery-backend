@@ -1,7 +1,9 @@
 package com.food.fooddeliverybackend.controller;
 
+import com.food.fooddeliverybackend.enums.OrderBy;
 import com.food.fooddeliverybackend.model.FoodItemRequestDTO;
 import com.food.fooddeliverybackend.model.FoodItemResponseDTO;
+import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.service.FoodItemService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
@@ -36,8 +38,13 @@ public class FoodItemController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FoodItemResponseDTO>> getAllFoods() {
-        return ResponseEntity.ok(foodService.getAllFoods());
+    public ResponseEntity<List<FoodItemResponseDTO>> getAllFoods(
+            @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "sortColumn", required = false) String sortColumn,
+            @RequestParam(value = "orderBY", required = false) OrderBy orderBy) {
+        PageModel pageModel = new PageModel(pageNumber, pageSize, sortColumn, orderBy);
+        return ResponseEntity.ok(foodService.getAllFoods(pageModel));
     }
 
     @GetMapping("/{id}")

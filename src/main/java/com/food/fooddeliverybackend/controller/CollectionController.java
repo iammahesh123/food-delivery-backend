@@ -1,14 +1,18 @@
 package com.food.fooddeliverybackend.controller;
 
+import com.food.fooddeliverybackend.enums.OrderBy;
 import com.food.fooddeliverybackend.model.CollectionRequestDTO;
 import com.food.fooddeliverybackend.model.CollectionResponseDTO;
+import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.service.CollectionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Collections Controller", description = "List of Collections Endpoints")
 @RestController
 @RequestMapping("/collections")
 public class CollectionController {
@@ -35,8 +39,13 @@ public class CollectionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CollectionResponseDTO>> getCollections() {
-        return ResponseEntity.ok(collectionService.getCollections());
+    public ResponseEntity<List<CollectionResponseDTO>> getCollections(
+            @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "sortColumn", required = false) String sortColumn,
+            @RequestParam(value = "orderBY", required = false) OrderBy orderBy) {
+        PageModel pageModel = new PageModel(pageNumber, pageSize, sortColumn, orderBy);
+        return ResponseEntity.ok(collectionService.getCollections(pageModel));
     }
 
     @DeleteMapping("/{id}")

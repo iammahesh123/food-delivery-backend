@@ -4,6 +4,7 @@ import com.food.fooddeliverybackend.entity.OrdersEntity;
 import com.food.fooddeliverybackend.mapper.OrderMapper;
 import com.food.fooddeliverybackend.model.OrderRequestDTO;
 import com.food.fooddeliverybackend.model.OrderResponseDTO;
+import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.repository.OrdersRepository;
 import com.food.fooddeliverybackend.service.OrderService;
 import org.hibernate.query.Order;
@@ -49,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderResponseDTO> getAllOrders() {
+    public List<OrderResponseDTO> getAllOrders(PageModel pageModel) {
         List<OrdersEntity> orders = ordersRepository.findAll();
         return orders.stream().map(ordersEntity ->  orderMapper.orderResponseDTO(ordersEntity, modelMapper)).collect(Collectors.toList());
     }

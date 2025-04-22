@@ -1,14 +1,18 @@
 package com.food.fooddeliverybackend.controller;
 
+import com.food.fooddeliverybackend.enums.OrderBy;
+import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.model.ReviewRequestDTO;
 import com.food.fooddeliverybackend.model.ReviewResponseDTO;
 import com.food.fooddeliverybackend.service.ReviewService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Review Controller", description = "List of Review Endpoints")
 @RestController
 @RequestMapping("/review")
 public class ReviewController {
@@ -35,8 +39,13 @@ public class ReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReviewResponseDTO>> getAllReviews() {
-        return ResponseEntity.ok(reviewService.getAllReviews());
+    public ResponseEntity<List<ReviewResponseDTO>> getAllReviews(
+            @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "sortColumn", required = false) String sortColumn,
+            @RequestParam(value = "orderBY", required = false) OrderBy orderBy) {
+        PageModel pageModel = new PageModel(pageNumber, pageSize, sortColumn, orderBy);
+        return ResponseEntity.ok(reviewService.getAllReviews(pageModel));
     }
 
     @DeleteMapping("/{id}")

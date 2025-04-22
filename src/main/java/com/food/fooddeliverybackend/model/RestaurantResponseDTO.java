@@ -25,7 +25,7 @@ public class RestaurantResponseDTO {
     private String imageUrl;
 
     private Long ownerId;
-    private List<Long> foodItemsIds;
+    private List<FoodItemResponseDTO> foodItemsIds;
     private List<Long> ordersIds;
     private Long collectionId;
     private LocalDateTime createdAt;

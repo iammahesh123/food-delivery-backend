@@ -6,6 +6,7 @@ import com.food.fooddeliverybackend.entity.RestaurantEntity;
 import com.food.fooddeliverybackend.entity.UserEntity;
 import com.food.fooddeliverybackend.exception.ResourceNotFoundException;
 import com.food.fooddeliverybackend.mapper.RestaurantMapper;
+import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.model.RestaurantRequestDTO;
 import com.food.fooddeliverybackend.model.RestaurantResponseDTO;
 import com.food.fooddeliverybackend.repository.CollectionsRepository;
@@ -72,6 +73,10 @@ public class RestaurantServiceImpl implements RestaurantService {
                     .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + restaurantRequestDTO.getOwnerId()));
             restaurant.setOwner(owner);
         }
+        if (restaurantRequestDTO.getCuisines() != null) {
+            restaurant.setCuisineTypes(restaurantRequestDTO.getCuisines());
+        }
+
         if(restaurantRequestDTO.getCollectionId() != null) {
             CollectionEntity collections = collectionsRepository.findById(restaurantRequestDTO.getCollectionId()).orElse(null);
             restaurant.setCollectionEntity(collections);
@@ -98,7 +103,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<RestaurantResponseDTO> getAll() {
+    public List<RestaurantResponseDTO> getAll(PageModel pageModel) {
         List<RestaurantEntity> restaurants = restaurantRepository.findAll();
         return restaurants.stream().map(restaurant -> restaurantMapper.toDTO(restaurant,modelMapper)).collect(Collectors.toList());
     }
