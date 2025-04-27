@@ -11,5 +11,5 @@ public class CollectionRequestDTO {
     private String collectionName;
     private String collectionType;
     private String description;
-    private long places;
+    private double rating;
 }

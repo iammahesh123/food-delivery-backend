@@ -5,7 +5,10 @@ import com.food.fooddeliverybackend.mapper.ReviewMapper;
 import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.model.ReviewRequestDTO;
 import com.food.fooddeliverybackend.model.ReviewResponseDTO;
+import com.food.fooddeliverybackend.repository.FoodItemRepository;
+import com.food.fooddeliverybackend.repository.RestaurantRepository;
 import com.food.fooddeliverybackend.repository.ReviewRepository;
+import com.food.fooddeliverybackend.repository.UserRepository;
 import com.food.fooddeliverybackend.service.ReviewService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -22,17 +25,33 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
     private final ModelMapper modelMapper;
+    private final FoodItemRepository foodItemRepository;
+    private final RestaurantRepository restaurantRepository;
+    private final UserRepository userRepository;
 
-    public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewMapper reviewMapper, ModelMapper modelMapper) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewMapper reviewMapper, ModelMapper modelMapper, FoodItemRepository foodItemRepository, RestaurantRepository restaurantRepository, UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
         this.reviewMapper = reviewMapper;
         this.modelMapper = modelMapper;
+        this.foodItemRepository = foodItemRepository;
+        this.restaurantRepository = restaurantRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public ReviewResponseDTO createReview(ReviewRequestDTO reviewRequestDTO) {
         ReviewEntity reviewEntity = new ReviewEntity();
         BeanUtils.copyProperties(reviewRequestDTO, reviewEntity);
+        if (reviewRequestDTO.getFoodItemId() > 0) {
+            foodItemRepository.findById(reviewRequestDTO.getFoodItemId()).ifPresent(reviewEntity::setFoodItemEntity);
+        }
+        if (reviewRequestDTO.getRestaurantId() > 0) {
+            restaurantRepository.findById(reviewRequestDTO.getRestaurantId()).ifPresent(reviewEntity::setRestaurantEntity);
+        }
+        if(reviewRequestDTO.getUserId() > 0) {
+            userRepository.findById(reviewRequestDTO.getUserId()).ifPresent(reviewEntity::setUserEntity);
+        }
+
         ReviewEntity savedReview = reviewRepository.save(reviewEntity);
         return reviewMapper.toDTO(savedReview,modelMapper);
     }
@@ -41,6 +60,21 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewResponseDTO updateReview(Long id, ReviewRequestDTO reviewRequestDTO) {
         ReviewEntity reviewEntity = reviewRepository.findById(id).orElse(null);
         BeanUtils.copyProperties(reviewRequestDTO, reviewEntity);
+        if (reviewRequestDTO.getFoodItemId() > 0) {
+            foodItemRepository.findById(reviewRequestDTO.getFoodItemId())
+                    .ifPresent(reviewEntity::setFoodItemEntity);
+        } else {
+            reviewEntity.setFoodItemEntity(null);
+        }
+        if (reviewRequestDTO.getRestaurantId() > 0) {
+            restaurantRepository.findById(reviewRequestDTO.getRestaurantId())
+                    .ifPresent(reviewEntity::setRestaurantEntity);
+        } else {
+            reviewEntity.setRestaurantEntity(null);
+        }
+        if(reviewRequestDTO.getUserId() > 0) {
+            userRepository.findById(reviewRequestDTO.getUserId()).ifPresent(reviewEntity::setUserEntity);
+        }
         ReviewEntity updatedReview = reviewRepository.save(reviewEntity);
         return reviewMapper.toDTO(updatedReview,modelMapper);
     }

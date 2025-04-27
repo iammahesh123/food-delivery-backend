@@ -33,6 +33,11 @@ public class CollectionServiceImpl implements CollectionService {
     public CollectionResponseDTO createCollection(CollectionRequestDTO collectionRequestDTO) {
         CollectionEntity collectionEntity = new CollectionEntity();
         BeanUtils.copyProperties(collectionRequestDTO, collectionEntity);
+        if (collectionEntity.getRestaurantEntities() != null) {
+            collectionEntity.setPlaces(collectionEntity.getRestaurantEntities().size());
+        } else {
+            collectionEntity.setPlaces(0);
+        }
         CollectionEntity savedCollection = collectionsRepository.save(collectionEntity);
         return collectionsMapper.toCollectionsDTO(savedCollection, modelMapper);
     }
@@ -41,6 +46,11 @@ public class CollectionServiceImpl implements CollectionService {
     public CollectionResponseDTO updateCollection(Long id, CollectionRequestDTO collectionRequestDTO) {
         CollectionEntity collectionEntity = collectionsRepository.findById(id).orElse(null);
         BeanUtils.copyProperties(collectionRequestDTO, collectionEntity);
+        if (collectionEntity.getRestaurantEntities() != null) {
+            collectionEntity.setPlaces(collectionEntity.getRestaurantEntities().size());
+        } else {
+            collectionEntity.setPlaces(0);
+        }
         CollectionEntity updatedCollection = collectionsRepository.save(collectionEntity);
         return collectionsMapper.toCollectionsDTO(updatedCollection, modelMapper);
     }

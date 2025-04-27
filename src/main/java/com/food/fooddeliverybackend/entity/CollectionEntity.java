@@ -21,8 +21,14 @@ public class CollectionEntity extends BaseEntity<String> {
     private String collectionName;
     private String collectionType;
     private String description;
+    private double rating;
     private long places;
 
     @OneToMany(mappedBy = "collectionEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<RestaurantEntity> restaurantEntities = new ArrayList<>();
+
+    @Transient
+    public long getPlaces() {
+        return restaurantEntities != null ? restaurantEntities.size() : 0;
+    }
 }

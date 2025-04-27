@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReviewMapper {
     public ReviewResponseDTO toDTO(ReviewEntity reviewEntity, ModelMapper modelMapper) {
-        return modelMapper.map(reviewEntity, ReviewResponseDTO.class);
+        ReviewResponseDTO dto = modelMapper.map(reviewEntity, ReviewResponseDTO.class);
+        dto.setFoodItemId(reviewEntity.getFoodItemEntity() != null ? reviewEntity.getFoodItemEntity().getId() : 0L);
+        dto.setRestaurantId(reviewEntity.getRestaurantEntity() != null ? reviewEntity.getRestaurantEntity().getId() : 0L);
+        return dto;
     }
 }

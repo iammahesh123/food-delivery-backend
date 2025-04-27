@@ -1,5 +1,6 @@
 package com.food.fooddeliverybackend.model;
 
+import com.food.fooddeliverybackend.enums.Amenities;
 import com.food.fooddeliverybackend.enums.CuisineType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -17,6 +19,7 @@ public class RestaurantRequestDTO {
     private String address;
     private String phone;
     private List<CuisineType> cuisines;
+    private Set<Amenities> amenities;
     private LocalTime openingTime;
     private LocalTime closingTime;
     private double rating;

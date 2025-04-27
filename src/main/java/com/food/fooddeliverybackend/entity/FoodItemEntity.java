@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
@@ -27,5 +30,8 @@ public class FoodItemEntity extends BaseEntity<String> {
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
     private RestaurantEntity restaurantEntity;
+
+    @OneToMany(mappedBy = "foodItemEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ReviewEntity> reviewEntityList = new ArrayList<>();
 
 }

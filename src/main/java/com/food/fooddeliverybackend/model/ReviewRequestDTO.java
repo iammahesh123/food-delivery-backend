@@ -11,5 +11,7 @@ public class ReviewRequestDTO {
     private String title;
     private String comment;
     private int rating;
+    private long userId;
     private long foodItemId;
+    private long restaurantId;
 }

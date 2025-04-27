@@ -15,6 +15,7 @@ public class ReviewResponseDTO {
     private String comment;
     private int rating;
     private long foodItemId;
+    private long restaurantId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;

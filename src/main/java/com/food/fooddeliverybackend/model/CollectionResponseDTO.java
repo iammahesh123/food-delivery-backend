@@ -16,6 +16,7 @@ public class CollectionResponseDTO {
     private String collectionType;
     private String description;
     private long places;
+    private double rating;
     private List<CollectionRestaurantDTO> restaurants;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
