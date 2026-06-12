@@ -1,6 +1,7 @@
 package com.food.fooddeliverybackend.service.impl;
 
 import com.food.fooddeliverybackend.entity.AddressEntity;
+import com.food.fooddeliverybackend.exception.ResourceNotFoundException;
 import com.food.fooddeliverybackend.mapper.AddressMapper;
 import com.food.fooddeliverybackend.model.AddressRequestDTO;
 import com.food.fooddeliverybackend.model.AddressResponseDTO;
@@ -39,7 +40,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public AddressResponseDTO updateAddress(Long id, AddressRequestDTO addressRequestDTO) {
-        AddressEntity existingAddress = addressRepository.findById(id).orElse(null);
+        AddressEntity existingAddress = addressRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id));
         BeanUtils.copyProperties(addressRequestDTO, existingAddress);
         AddressEntity updatedAddress = addressRepository.save(existingAddress);
         return addressMapper.toDTO(updatedAddress,modelMapper);
@@ -47,7 +48,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public AddressResponseDTO getAddressById(Long id) {
-        AddressEntity address = addressRepository.findById(id).orElse(null);
+        AddressEntity address = addressRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id));
         return addressMapper.toDTO(address,modelMapper);
     }
 
@@ -59,7 +60,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void deleteAddress(Long id) {
-        AddressEntity address = addressRepository.findById(id).orElse(null);
+        AddressEntity address = addressRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id));
         addressRepository.delete(address);
     }
 }

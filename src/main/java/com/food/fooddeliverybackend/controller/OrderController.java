@@ -1,6 +1,10 @@
 package com.food.fooddeliverybackend.controller;
 
 import com.food.fooddeliverybackend.enums.OrderBy;
+import com.food.fooddeliverybackend.enums.OrderStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+
+import java.util.Map;
 import com.food.fooddeliverybackend.model.OrderRequestDTO;
 import com.food.fooddeliverybackend.model.OrderResponseDTO;
 import com.food.fooddeliverybackend.model.PageModel;
@@ -76,6 +80,43 @@ public class OrderController {
 
         PageModel pageModel = new PageModel(pageNumber, pageSize, sortColumn, orderBy);
         return ResponseEntity.ok().body(orderService.getAllOrders(pageModel));
+    }
+
+    @Operation(summary = "Get the current user's orders")
+    @GetMapping("/my")
+    public ResponseEntity<List<OrderResponseDTO>> getMyOrders() {
+        return ResponseEntity.ok().body(orderService.getMyOrders());
+    }
+
+    @Operation(summary = "Cancel the current user's order")
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<OrderResponseDTO> cancelMyOrder(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(orderService.cancelMyOrder(id));
+    }
+
+    @Operation(summary = "Get all orders for a restaurant (owner/admin only)")
+    @PreAuthorize("hasAnyRole('RESTAURANT_OWNER','ADMIN')")
+    @GetMapping("/restaurant/{restaurantId}")
+    public ResponseEntity<List<OrderResponseDTO>> getOrdersByRestaurant(
+            @PathVariable("restaurantId") Long restaurantId) {
+        return ResponseEntity.ok().body(orderService.getOrdersByRestaurant(restaurantId));
+    }
+
+    @Operation(summary = "Get order statistics for a restaurant (owner/admin only)")
+    @PreAuthorize("hasAnyRole('RESTAURANT_OWNER','ADMIN')")
+    @GetMapping("/restaurant/{restaurantId}/stats")
+    public ResponseEntity<Map<String, Object>> getRestaurantStats(
+            @PathVariable("restaurantId") Long restaurantId) {
+        return ResponseEntity.ok().body(orderService.getRestaurantStats(restaurantId));
+    }
+
+    @Operation(summary = "Update order status (owner/admin only)")
+    @PreAuthorize("hasAnyRole('RESTAURANT_OWNER','ADMIN')")
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<OrderResponseDTO> updateOrderStatus(
+            @PathVariable("id") Long id,
+            @RequestParam("status") OrderStatus status) {
+        return ResponseEntity.ok().body(orderService.updateOrderStatus(id, status));
     }
 
     @Operation(summary = "Delete an order by ID")

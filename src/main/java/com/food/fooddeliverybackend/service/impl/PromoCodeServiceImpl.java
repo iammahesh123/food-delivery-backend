@@ -1,6 +1,7 @@
 package com.food.fooddeliverybackend.service.impl;
 
 import com.food.fooddeliverybackend.entity.PromoCodeEntity;
+import com.food.fooddeliverybackend.exception.ResourceNotFoundException;
 import com.food.fooddeliverybackend.mapper.PromoCodeMapper;
 import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.model.PromoCodeRequestDTO;
@@ -39,7 +40,7 @@ public class PromoCodeServiceImpl implements PromoCodeService {
 
     @Override
     public PromoCodeResponseDTO updatePromoCode(Long id, PromoCodeRequestDTO promoCodeRequestDTO) {
-        PromoCodeEntity existingCode = promoCodeRepository.findById(id).orElse(null);
+        PromoCodeEntity existingCode = promoCodeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Promo code not found with id: " + id));
         BeanUtils.copyProperties(promoCodeRequestDTO, existingCode);
         PromoCodeEntity updatedCode = promoCodeRepository.save(existingCode);
         return promoCodeMapper.toDTO(updatedCode,modelMapper);
@@ -47,7 +48,7 @@ public class PromoCodeServiceImpl implements PromoCodeService {
 
     @Override
     public PromoCodeResponseDTO getPromoCode(Long id) {
-        PromoCodeEntity existingCode = promoCodeRepository.findById(id).orElse(null);
+        PromoCodeEntity existingCode = promoCodeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Promo code not found with id: " + id));
         return promoCodeMapper.toDTO(existingCode,modelMapper);
     }
 
@@ -59,7 +60,7 @@ public class PromoCodeServiceImpl implements PromoCodeService {
 
     @Override
     public void deletePromoCode(Long id) {
-        PromoCodeEntity existingCode = promoCodeRepository.findById(id).orElse(null);
+        PromoCodeEntity existingCode = promoCodeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Promo code not found with id: " + id));
         promoCodeRepository.delete(existingCode);
     }
 }

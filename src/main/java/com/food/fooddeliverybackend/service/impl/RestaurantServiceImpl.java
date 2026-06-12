@@ -13,6 +13,7 @@ import com.food.fooddeliverybackend.repository.CollectionsRepository;
 import com.food.fooddeliverybackend.repository.FoodItemRepository;
 import com.food.fooddeliverybackend.repository.RestaurantRepository;
 import com.food.fooddeliverybackend.repository.UserRepository;
+import com.food.fooddeliverybackend.security.SecurityUtil;
 import com.food.fooddeliverybackend.service.RestaurantService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -33,8 +34,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final UserRepository userRepository;
     private final FoodItemRepository foodItemRepository;
     private final CollectionsRepository collectionsRepository;
+    private final SecurityUtil securityUtil;
 
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper, ModelMapper modelMapper, UserRepository userRepository, FoodItemRepository foodItemRepository, CollectionsRepository collectionsRepository) {
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper, ModelMapper modelMapper, UserRepository userRepository, FoodItemRepository foodItemRepository, CollectionsRepository collectionsRepository, SecurityUtil securityUtil) {
+        this.securityUtil = securityUtil;
         this.restaurantRepository = restaurantRepository;
         this.restaurantMapper = restaurantMapper;
         this.modelMapper = modelMapper;
@@ -48,8 +51,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         RestaurantEntity restaurant = new RestaurantEntity();
         BeanUtils.copyProperties(restaurantRequestDTO, restaurant);
         if(restaurantRequestDTO.getOwnerId() != null){
-            UserEntity owner = userRepository.findById(restaurantRequestDTO.getOwnerId()).orElse(null);
+            UserEntity owner = userRepository.findById(restaurantRequestDTO.getOwnerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + restaurantRequestDTO.getOwnerId()));
             restaurant.setOwner(owner);
+        } else {
+            restaurant.setOwner(securityUtil.getCurrentUser());
         }
         if(restaurantRequestDTO.getFoodItemsIds() != null) {
             List<FoodItemEntity> foodItems = foodItemRepository.findAllById(restaurantRequestDTO.getFoodItemsIds());
@@ -60,7 +66,8 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurant.setFoodItemEntities(foodItems);
         }
         if(restaurantRequestDTO.getCollectionId() != null) {
-            CollectionEntity collections = collectionsRepository.findById(restaurantRequestDTO.getCollectionId()).orElse(null);
+            CollectionEntity collections = collectionsRepository.findById(restaurantRequestDTO.getCollectionId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Collection not found with id: " + restaurantRequestDTO.getCollectionId()));
             restaurant.setCollectionEntity(collections);
         }
         RestaurantEntity savedRestaurant = restaurantRepository.save(restaurant);
@@ -69,7 +76,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public RestaurantResponseDTO update(Long id, RestaurantRequestDTO restaurantRequestDTO) {
-        RestaurantEntity restaurant = restaurantRepository.findById(id).orElse(null);
+        RestaurantEntity restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with id: " + id));
         BeanUtils.copyProperties(restaurantRequestDTO, restaurant);
         if (restaurantRequestDTO.getOwnerId() != null) {
             UserEntity owner = userRepository.findById(restaurantRequestDTO.getOwnerId())
@@ -81,7 +89,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
 
         if(restaurantRequestDTO.getCollectionId() != null) {
-            CollectionEntity collections = collectionsRepository.findById(restaurantRequestDTO.getCollectionId()).orElse(null);
+            CollectionEntity collections = collectionsRepository.findById(restaurantRequestDTO.getCollectionId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Collection not found with id: " + restaurantRequestDTO.getCollectionId()));
             restaurant.setCollectionEntity(collections);
         }
         if (restaurantRequestDTO.getFoodItemsIds() != null && !restaurantRequestDTO.getFoodItemsIds().isEmpty()) {
@@ -109,6 +118,14 @@ public class RestaurantServiceImpl implements RestaurantService {
     public List<RestaurantResponseDTO> getAll(PageModel pageModel) {
         Page<RestaurantEntity> restaurants = restaurantRepository.findAll(applyPagination(pageModel));
         return restaurants.stream().map(restaurant -> restaurantMapper.toDTO(restaurant,modelMapper)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RestaurantResponseDTO> getMyRestaurants() {
+        Long ownerId = securityUtil.getCurrentUser().getId();
+        return restaurantRepository.findByOwner_Id(ownerId).stream()
+                .map(restaurant -> restaurantMapper.toDTO(restaurant, modelMapper))
+                .collect(Collectors.toList());
     }
 
     @Override

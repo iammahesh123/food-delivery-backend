@@ -26,4 +26,7 @@ public class OrderRequestDTO {
     private Long userId;
     private Long restaurantId;
     private List<Long> orderItemIds;
+
+    /** Items to order (foodItemId + quantity). Preferred over orderItemIds for placing new orders. */
+    private List<OrderItemRequestDTO> items;
 }

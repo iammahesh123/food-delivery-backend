@@ -1,6 +1,7 @@
 package com.food.fooddeliverybackend.service.impl;
 
 import com.food.fooddeliverybackend.entity.FoodItemEntity;
+import com.food.fooddeliverybackend.exception.ResourceNotFoundException;
 import com.food.fooddeliverybackend.entity.RestaurantEntity;
 import com.food.fooddeliverybackend.mapper.FoodItemMapper;
 import com.food.fooddeliverybackend.model.FoodItemRequestDTO;
@@ -38,7 +39,8 @@ public class FoodItemServiceImpl implements FoodItemService {
         FoodItemEntity food = new FoodItemEntity();
         BeanUtils.copyProperties(foodRequestDTO, food);
         if(foodRequestDTO.getRestaurantId() != null) {
-            RestaurantEntity restaurant = restaurantRepository.findById(foodRequestDTO.getRestaurantId()).orElse(null);
+            RestaurantEntity restaurant = restaurantRepository.findById(foodRequestDTO.getRestaurantId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with id: " + foodRequestDTO.getRestaurantId()));
             food.setRestaurantEntity(restaurant);
             restaurantRepository.save(restaurant);
         }
@@ -48,10 +50,12 @@ public class FoodItemServiceImpl implements FoodItemService {
 
     @Override
     public FoodItemResponseDTO updateFood(Long id, FoodItemRequestDTO foodRequestDTO) {
-        FoodItemEntity existingFood = foodItemRepository.findById(id).orElse(null);
+        FoodItemEntity existingFood = foodItemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Food item not found with id: " + id));
         BeanUtils.copyProperties(foodRequestDTO, existingFood);
         if(foodRequestDTO.getRestaurantId() != null) {
-            RestaurantEntity restaurant = restaurantRepository.findById(foodRequestDTO.getRestaurantId()).orElse(null);
+            RestaurantEntity restaurant = restaurantRepository.findById(foodRequestDTO.getRestaurantId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with id: " + foodRequestDTO.getRestaurantId()));
             existingFood.setRestaurantEntity(restaurant);
             restaurantRepository.save(restaurant);
         }
@@ -73,8 +77,16 @@ public class FoodItemServiceImpl implements FoodItemService {
     }
 
     @Override
+    public List<FoodItemResponseDTO> getFoodsByRestaurant(Long restaurantId) {
+        return foodItemRepository.findByRestaurantEntity_Id(restaurantId).stream()
+                .map(food -> foodItemMapper.foodItemResponseDTO(food, modelMapper))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void deleteFoodById(Long id) {
-        FoodItemEntity item = foodItemRepository.findById(id).orElse(null);
+        FoodItemEntity item = foodItemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Food item not found with id: " + id));
         foodItemRepository.delete(item);
     }
 }

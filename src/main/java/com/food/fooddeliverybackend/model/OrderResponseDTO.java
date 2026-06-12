@@ -2,6 +2,7 @@ package com.food.fooddeliverybackend.model;
 
 import com.food.fooddeliverybackend.enums.OrderStatus;
 import com.food.fooddeliverybackend.enums.PaymentMethod;
+import com.food.fooddeliverybackend.enums.PaymentStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -24,9 +25,16 @@ public class OrderResponseDTO {
     private PaymentMethod paymentMethod;
     private String deliveryAddress;
     private LocalDateTime orderDate;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
     private Long userId;
+    private String customerName;
     private Long restaurantId;
+    private String restaurantName;
+    private Long deliveryAgentId;
+    private String deliveryAgentName;
     private List<Long> orderItemIds;
+    private List<OrderItemDetailDTO> items;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;

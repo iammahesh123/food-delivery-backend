@@ -10,7 +10,12 @@ import java.time.LocalDateTime;
 @Data
 public class UserResponseDTO {
     String token;
+    Long userId;
+    String username;
+    String fullName;
+    String email;
     String role;
+    String profilePictureUrl;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 

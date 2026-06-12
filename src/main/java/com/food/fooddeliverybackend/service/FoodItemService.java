@@ -11,5 +11,6 @@ public interface FoodItemService {
     FoodItemResponseDTO updateFood(Long id,FoodItemRequestDTO foodRequestDTO);
     List<FoodItemResponseDTO> getAllFoods(PageModel pageModel);
     FoodItemResponseDTO getFoodById(Long id);
+    List<FoodItemResponseDTO> getFoodsByRestaurant(Long restaurantId);
     void deleteFoodById(Long id);
 }

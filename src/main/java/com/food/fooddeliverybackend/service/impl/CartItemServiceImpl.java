@@ -1,6 +1,7 @@
 package com.food.fooddeliverybackend.service.impl;
 
 import com.food.fooddeliverybackend.entity.CartItemEntity;
+import com.food.fooddeliverybackend.exception.ResourceNotFoundException;
 import com.food.fooddeliverybackend.mapper.CartItemMapper;
 import com.food.fooddeliverybackend.model.CartItemRequestDTO;
 import com.food.fooddeliverybackend.model.CartItemResponseDTO;
@@ -39,7 +40,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItemResponseDTO update(Long id, CartItemRequestDTO cartItemRequestDTO) {
-        CartItemEntity existingEntity = cartItemRepository.findById(id).orElse(null);
+        CartItemEntity existingEntity = cartItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cart item not found with id: " + id));
         BeanUtils.copyProperties(cartItemRequestDTO, existingEntity);
         CartItemEntity updatedCartItems = cartItemRepository.save(existingEntity);
         return cartItemMapper.toDTO(updatedCartItems,modelMapper);
@@ -47,7 +48,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItemResponseDTO getCartItemById(Long id) {
-        CartItemEntity cartItemEntity = cartItemRepository.findById(id).orElse(null);
+        CartItemEntity cartItemEntity = cartItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cart item not found with id: " + id));
         return cartItemMapper.toDTO(cartItemEntity,modelMapper);
     }
 
@@ -59,7 +60,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public void deleteCartItemById(Long id) {
-        CartItemEntity cartItemEntity = cartItemRepository.findById(id).orElse(null);
+        CartItemEntity cartItemEntity = cartItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cart item not found with id: " + id));
         cartItemRepository.delete(cartItemEntity);
     }
 }

@@ -83,6 +83,13 @@ public class FoodItemController {
         return ResponseEntity.ok(foodService.getFoodById(id));
     }
 
+    @Operation(summary = "Get all food items for a restaurant")
+    @GetMapping("/restaurant/{restaurantId}")
+    public ResponseEntity<List<FoodItemResponseDTO>> getFoodsByRestaurant(
+            @PathVariable Long restaurantId) {
+        return ResponseEntity.ok(foodService.getFoodsByRestaurant(restaurantId));
+    }
+
     @Operation(summary = "Delete a food item by its ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Food item deleted successfully"),

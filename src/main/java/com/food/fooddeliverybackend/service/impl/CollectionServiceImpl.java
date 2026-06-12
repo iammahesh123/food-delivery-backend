@@ -1,6 +1,7 @@
 package com.food.fooddeliverybackend.service.impl;
 
 import com.food.fooddeliverybackend.entity.CollectionEntity;
+import com.food.fooddeliverybackend.exception.ResourceNotFoundException;
 import com.food.fooddeliverybackend.mapper.CollectionsMapper;
 import com.food.fooddeliverybackend.model.CollectionRequestDTO;
 import com.food.fooddeliverybackend.model.CollectionResponseDTO;
@@ -44,7 +45,7 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public CollectionResponseDTO updateCollection(Long id, CollectionRequestDTO collectionRequestDTO) {
-        CollectionEntity collectionEntity = collectionsRepository.findById(id).orElse(null);
+        CollectionEntity collectionEntity = collectionsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Collection not found with id: " + id));
         BeanUtils.copyProperties(collectionRequestDTO, collectionEntity);
         if (collectionEntity.getRestaurantEntities() != null) {
             collectionEntity.setPlaces(collectionEntity.getRestaurantEntities().size());
@@ -57,7 +58,7 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public CollectionResponseDTO getCollection(Long id) {
-        CollectionEntity collectionEntity = collectionsRepository.findById(id).orElse(null);
+        CollectionEntity collectionEntity = collectionsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Collection not found with id: " + id));
         return collectionsMapper.toCollectionsDTO(collectionEntity, modelMapper);
     }
 
@@ -69,7 +70,7 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public void deleteCollection(Long id) {
-        CollectionEntity collectionEntity = collectionsRepository.findById(id).orElse(null);
+        CollectionEntity collectionEntity = collectionsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Collection not found with id: " + id));
         collectionsRepository.delete(collectionEntity);
     }
 }

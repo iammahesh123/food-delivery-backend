@@ -7,5 +7,6 @@ import com.food.fooddeliverybackend.model.UserResponseDTO;
 public interface AuthService {
     UserResponseDTO login(UserLoginDTO userLoginDTO);
     String register(UserRegisterDTO user);
+    UserResponseDTO me();
 }
 

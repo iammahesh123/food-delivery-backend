@@ -3,6 +3,7 @@ package com.food.fooddeliverybackend.entity;
 import com.food.fooddeliverybackend.audit.BaseEntity;
 import com.food.fooddeliverybackend.enums.OrderStatus;
 import com.food.fooddeliverybackend.enums.PaymentMethod;
+import com.food.fooddeliverybackend.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,12 +28,20 @@ public class OrdersEntity extends BaseEntity<String> {
     private OrderStatus status;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus = PaymentStatus.PENDING;
+
     private String deliveryAddress;
     private LocalDateTime orderDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity userEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "delivery_agent_id")
+    private UserEntity deliveryAgent;
 
     @ManyToOne
     @JoinColumn(name = "restraunt_id",nullable = false)

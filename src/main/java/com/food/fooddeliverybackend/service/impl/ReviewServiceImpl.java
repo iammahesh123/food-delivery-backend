@@ -1,6 +1,7 @@
 package com.food.fooddeliverybackend.service.impl;
 
 import com.food.fooddeliverybackend.entity.ReviewEntity;
+import com.food.fooddeliverybackend.exception.ResourceNotFoundException;
 import com.food.fooddeliverybackend.mapper.ReviewMapper;
 import com.food.fooddeliverybackend.model.PageModel;
 import com.food.fooddeliverybackend.model.ReviewRequestDTO;
@@ -58,7 +59,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewResponseDTO updateReview(Long id, ReviewRequestDTO reviewRequestDTO) {
-        ReviewEntity reviewEntity = reviewRepository.findById(id).orElse(null);
+        ReviewEntity reviewEntity = reviewRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id));
         BeanUtils.copyProperties(reviewRequestDTO, reviewEntity);
         if (reviewRequestDTO.getFoodItemId() > 0) {
             foodItemRepository.findById(reviewRequestDTO.getFoodItemId())
@@ -81,7 +82,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewResponseDTO getReview(Long id) {
-        ReviewEntity reviewEntity = reviewRepository.findById(id).orElse(null);
+        ReviewEntity reviewEntity = reviewRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id));
         return reviewMapper.toDTO(reviewEntity,modelMapper);
     }
 
@@ -93,7 +94,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void deleteReview(Long id) {
-        ReviewEntity reviewEntity = reviewRepository.findById(id).orElse(null);
+        ReviewEntity reviewEntity = reviewRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id));
         reviewRepository.delete(reviewEntity);
     }
 }

@@ -66,8 +66,26 @@ public class AuthServiceImpl implements AuthService {
 
         // Generate JWT token
         String token = jwtUtil.generateToken(userEntity.getUsername());
+        return toResponse(userEntity, token);
+    }
+
+    @Override
+    public UserResponseDTO me() {
+        UserEntity userEntity = userRepository
+                .findByUsername(com.food.fooddeliverybackend.security.SecurityUtil.getCurrentUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return toResponse(userEntity, null);
+    }
+
+    private UserResponseDTO toResponse(UserEntity userEntity, String token) {
+        UserResponseDTO responseDTO = new UserResponseDTO();
         responseDTO.setToken(token);
+        responseDTO.setUserId(userEntity.getId());
+        responseDTO.setUsername(userEntity.getUsername());
+        responseDTO.setFullName(userEntity.getFullName());
+        responseDTO.setEmail(userEntity.getEmail());
         responseDTO.setRole(String.valueOf(userEntity.getRole()));
+        responseDTO.setProfilePictureUrl(userEntity.getProfilePictureUrl());
         responseDTO.setCreatedAt(userEntity.getCreatedAt());
         responseDTO.setUpdatedAt(userEntity.getUpdatedAt());
         return responseDTO;

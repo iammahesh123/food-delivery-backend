@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +55,7 @@ public class AuthController {
                             )
                     )
             )
-            @org.springframework.web.bind.annotation.RequestBody UserRegisterDTO userRegisterDTO) {
+            @Valid @org.springframework.web.bind.annotation.RequestBody UserRegisterDTO userRegisterDTO) {
         return ResponseEntity.ok(authService.register(userRegisterDTO));
     }
 
@@ -83,7 +84,20 @@ public class AuthController {
                             )
                     )
             )
-            @org.springframework.web.bind.annotation.RequestBody UserLoginDTO userLoginDTO) {
+            @Valid @org.springframework.web.bind.annotation.RequestBody UserLoginDTO userLoginDTO) {
         return ResponseEntity.ok(authService.login(userLoginDTO));
+    }
+
+    @Operation(
+            summary = "Get current user",
+            description = "Returns the profile of the currently authenticated user (from the JWT)."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Current user profile", content = @Content(schema = @Schema(implementation = UserResponseDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Not authenticated", content = @Content)
+    })
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> me() {
+        return ResponseEntity.ok(authService.me());
     }
 }

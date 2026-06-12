@@ -50,6 +50,12 @@ public class RestaurantController {
         return ResponseEntity.ok().body(restaurantService.update(id, restaurantRequestDTO));
     }
 
+    @Operation(summary = "Get restaurants owned by the current user")
+    @GetMapping("/my")
+    public ResponseEntity<List<RestaurantResponseDTO>> getMyRestaurants() {
+        return ResponseEntity.ok().body(restaurantService.getMyRestaurants());
+    }
+
     @Operation(summary = "Get a restaurant by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Restaurant retrieved successfully"),

@@ -26,6 +26,6 @@ public class CartEntity extends BaseEntity<String> {
     @JoinColumn(name = "user_id",nullable = false)
     private UserEntity userEntity;
 
-    @OneToMany(mappedBy = "",cascade = CascadeType.ALL,orphanRemoval = false)
+    @OneToMany(mappedBy = "cartEntity",cascade = CascadeType.ALL,orphanRemoval = false)
     private List<CartItemEntity> cartItemEntityList;
 }
