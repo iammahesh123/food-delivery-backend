@@ -48,7 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         // Owner-only endpoints must be matched before the public read rules
                         .requestMatchers(HttpMethod.GET, "/restaurant/my").authenticated()
-                        // Public read access to browse restaurants / menu / collections / reviews
+                        // Public read access to browse restaurants / menu / collections / reviews / dining
                         .requestMatchers(HttpMethod.GET,
                                 "/restaurants/**",
                                 "/restaurant/**",
@@ -56,10 +56,14 @@ public class SecurityConfig {
                                 "/api/foods/**",
                                 "/collections/**",
                                 "/reviews/**",
-                                "/promo-codes/**").permitAll()
+                                "/promo-codes/**",
+                                "/dining/**",
+                                "/api/events/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/dining/**", "/api/events/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/dining/**", "/api/events/**").permitAll()
                         // Admin-only management surfaces
-                        .requestMatchers("/dashboard/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/users/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**", "/dashboard/admin/**").permitAll()
+                        .requestMatchers("/users/**").hasAnyRole("ADMIN", "CUSTOMER", "RESTAURANT_OWNER")
                         // Restaurant owner surfaces
                         .requestMatchers("/dashboard/restaurant/**").hasAnyRole("RESTAURANT_OWNER", "ADMIN")
                         // Delivery agent surfaces
